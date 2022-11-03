@@ -1,18 +1,21 @@
 def solution(distance, scope, times):
-    ch = []
-    for i in range(len(scope)):
-        start, end = sorted(scope[i])
-        work, rest = times[i]
-        time = start
-        while time <= end:
-            N = time % (work + rest)
-            if 0 < N <= work:
-                ch.append(time)
-                break
-            time += 1
-            
-    if ch:
-        return sorted(ch)[0]
-    else:
-        return distance
+    answer = distance
+    for s in scope:
+        s.sort()
+        
+    sum_time = [sum(times[i]) for i in range(len(times))]
+    scope_dict = {i: scope[i] for i in range(len(scope))}
+    scope_dict = sorted(scope_dict.items(), key = lambda item: item[1])
     
+    for scope in scope_dict:
+        index = scope[0]
+        sc = scope[1]
+
+        for i in range(sc[0], sc[1] + 1):
+            if 1 <= i % sum_time[index] <= times[index][0]:
+                answer = i
+                break
+        if answer != distance:
+            break
+            
+    return answer
