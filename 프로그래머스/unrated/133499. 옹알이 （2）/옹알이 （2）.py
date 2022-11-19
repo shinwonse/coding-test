@@ -5,12 +5,12 @@ def solution(babbling):
     possible = ['aya', 'ye', 'woo', 'ma']
     result = 0
     for b in babbling:
-        for i, p in enumerate(possible):
-            b = b.replace(p, str(i))
-        
-        if b.isdigit():
-            if '00' not in b and '11' not in b and '22' not in b and '33' not in b:
-                result += 1
-    
+        for p in possible:
+            if p * 2 not in b: # 연속되는 발음이 없으면
+                b = b.replace(p, ' ')
+        if len(b.strip()) == 0:
+            result += 1
+            
     return result
+        
         
