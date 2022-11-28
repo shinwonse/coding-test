@@ -12,5 +12,6 @@
 ## 다시 풀어볼 문제
 **2022.11**
 - [거스름돈](https://www.acmicpc.net/problem/14916)
+- [롤케이크 자르기](https://school.programmers.co.kr/learn/courses/30/lessons/132265)
 
 **2022.12**
