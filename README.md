@@ -16,3 +16,4 @@
 
 **2022.12**
 - [부대복귀](https://school.programmers.co.kr/learn/courses/30/lessons/132266)
+- [n진수게임](https://school.programmers.co.kr/learn/courses/30/lessons/17687)
