@@ -2,6 +2,60 @@
 
 ## 필수 알고리즘 정리
 
+### 해시 테이블
+javascript에서는 객체를 해시 테이블로 사용할 수 있다.
+```javascript
+const hashTable = {};
+hashTable['key'] = 'value';
+```
+Map 객체를 사용할 수도 있다.
+```javascript
+const map = new Map();
+map.set('key', 'value');
+```
+Set 객체를 사용할 수도 있다.
+```javascript
+const set = new Set();
+set.add('value');
+```
+
+### 스택과 큐
+```javascript
+class Node {
+  constructor(value) {
+    this.value = value;
+    this.next = null;
+  }
+}
+
+class Queue {
+  constructor() {
+    this.head = null;
+    this.tail = null;
+  }
+  
+  enqueue(newValue) {
+    const newNode = new Node(newValue);
+    if (this.head === null) {
+      this.head = this.tail = newNode;
+    } else {
+      this.tail.next = newNode;
+      this.tail = newNode;
+    }
+  }
+  
+  dequeue() {
+    const value = this.head.value;
+    this.head = this.head.next;
+    return value;
+  }
+  
+  peek() {
+    return this.head.value;
+  }
+}
+```
+
 ### Queue
 ```javascript
 class Queue {
@@ -24,6 +78,10 @@ class Queue {
   
   isEmpty() {
     return this.rear === this.front;
+  }
+  
+  size() {
+    return this.rear - this.front;
   }
 }
 ```
