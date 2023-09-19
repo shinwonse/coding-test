@@ -259,3 +259,53 @@ function solution(gems) {
   return answer; // 결과 반환
 }
 ```
+### 백트래킹
+- 모든 경우의 수를 탐색하는 알고리즘
+- DFS나 BFS를 이용할 수 있다.
+- 효율을 위해 탐색하지 않아도 되는 곳을 미리 막는 것을 가지치기라고 한다.
+- 자바스크립트는 재귀 효율이 나쁘기 때문에 DFS를 구현할 경우 스택을 이용하는 것이 좋다.
+  - 코딩 테스트에선 이를 고려하여 재귀로 작성해도 풀 수 있도록 문제를 제출하는 경우도 있다. 
+- 탐색에서 순환이 발생할 수 있다면 BFS를 이용하는 것이 편하다.
+
+**어떻게 작성할 것인가?**
+- 우선 모든 경우의 수를 찾을 수 있도록 코딩
+- 이후 문제에서 특정한 조건을 만족하는 것만 탐색하고 나머지는 탐색하지 않도록 조건문을 작성한다.
+- 즉, 절대로 답이 될 수 없는 것은 탐색을 종료한다.
+- 백트래킹은 모든 경우의 수를 찾아야 하기에 일단 하고본다.
+
+```javascript
+function check(queen, row) {
+  // 이전까지 두었던 퀸의 위치를 확인한다.
+  for (let i = 0; i < row; i += 1) {
+      // 행의 위치와 대각선의 위치를 체크한다.
+      if (queen[i] === queen[row] || Math.abs(queen[i] - queen[row]) === row - i) {
+          return false; // 둘 수 없다면 false
+      }
+  }
+
+  return true; // 모두 통과되면 true
+}
+
+function search(queen, row) {
+  const n = queen.length;
+  let count = 0;
+
+  if (n === row) { // 체스판 끝에 도달했다면.. 재귀의 탈출 조건
+      return 1;
+  }
+
+  for (let col = 0; col < n; col += 1) { // 0부터 n까지 열을 돌면 둘 수 있게 만든다.
+      queen[row] = col; // 우선 퀸을 둔다
+      if (check(queen, row)) { // 퀸을 둘 수 있다면..
+          count += search(queen, row + 1); // 다음 행으로 이동!
+      }
+  }
+
+  return count;
+}
+
+function solution(n) {
+  // 미리 n개 만큼의 배열을 초기화한다. 0번 행부터 시작한다.
+  return search(Array.from({ length: n }, () => 0), 0);
+}
+```
