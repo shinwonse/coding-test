@@ -12,12 +12,12 @@ const solution = (input) => {
     costs[i] = minCost;
   }
 
-  let answer = 0;
+  let answer = BigInt(0);
   for (let i = 0; i < N - 1; i += 1) {
-    answer += costs[i] * distances[i];
+    answer += BigInt(costs[i]) * BigInt(distances[i]);
   }
 
-  return answer;
+  return String(answer);
 };
 
 const answer = solution(input);
