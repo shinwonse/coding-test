@@ -1,30 +1,33 @@
 const path = process.platform === "linux" ? "/dev/stdin" : "./input.txt";
 const input = require("fs").readFileSync(path).toString().trim().split("\n");
 
-const solution = (input) => {
+function solution(input) {
   const n = Number(input[0]);
   const m = Number(input[1]);
-  const graph = Array.from(Array(n + 1), () => Array());
-  for (let i = 0; i < m; i += 1) {
-    const [start, end] = input[i + 2].split(' ').map(Number);
-    graph[start].push(end);
-    graph[end].push(start);
+
+  const graph = Array.from({ length: n + 1 }, () => []);
+
+  for (let i = 2; i < m + 2; i++) {
+    const [from, to] = input[i].split(" ").map(Number);
+    graph[from].push(to);
+    graph[to].push(from);
   }
 
-  let answer = 0;
   const visited = Array(n + 1).fill(false);
 
-  const dfs = (x) => {
-    visited[x] = true;
-    answer += 1;
-    for (const node of graph[x]) {
-      if (!visited[node]) dfs(node);
+  dfs(graph, visited, 1);
+
+  const result = visited.filter((v) => v).length - 1;
+  console.log(result);
+}
+
+function dfs(graph, visited, node) {
+  visited[node] = true;
+  for (const next of graph[node]) {
+    if (!visited[next]) {
+      dfs(graph, visited, next);
     }
   }
+}
 
-  dfs(1);
-  return answer - 1;
-};
-
-const answer  = solution(input);
-console.log(answer);
+solution(input);
