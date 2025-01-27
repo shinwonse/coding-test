@@ -1,22 +1,23 @@
 const path = process.platform === "linux" ? "/dev/stdin" : "./input.txt";
 const input = require("fs").readFileSync(path).toString().trim().split("\n");
 
-const solution = (input) => {
+function solution(input) {
+  let [N, K] = input[0].split(" ").map(Number);
+  const coins = input.slice(1).map(Number);
+
   let answer = 0;
 
-  let [N, K] = input.shift().split(" ").map((v) => Number(v));
-  const coins = input;
-  while (K !== 0) {
-    for (let i = N - 1; i >= 0; i-= 1) {
-      if (K >= coins[i]) {
-        K -= coins[i];
-        answer += 1;
-        break;
-      }
+  while (K > 0) {
+    if (coins.length === 0) break;
+    const coin = coins.pop();
+
+    if (K >= coin) {
+      answer += Math.floor(K / coin);
+      K %= coin;
     }
   }
-  return answer;
-};
 
-const answer = solution(input);
-console.log(answer);
+  console.log(answer);
+}
+
+solution(input);
