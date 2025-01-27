@@ -1,19 +1,19 @@
 const path = process.platform === "linux" ? "/dev/stdin" : "./input.txt";
 const input = require("fs").readFileSync(path).toString().trim().split("\n");
 
-const solution = (input) => {
-  const groups = input[0].split('-');
-  let answer = 0;
-  for (let i = 0; i <groups.length; i += 1) {
-    const current = groups[i].split('+').map(Number).reduce((a, b) => a + b);
-    if (i === 0) {
-      answer += current;
-    } else {
-      answer -= current;
-    }
-  }
-  return answer;
-};
+function solution(input) {
+  const groups = input[0].split("-");
 
-const answer = solution(input);
-console.log(answer);
+  const groupSums = groups.map((group) => {
+    return group
+      .split("+")
+      .map(Number)
+      .reduce((a, b) => a + b, 0);
+  });
+
+  const result = groupSums.slice(1).reduce((a, b) => a - b, groupSums[0]);
+
+  console.log(result);
+}
+
+solution(input);
