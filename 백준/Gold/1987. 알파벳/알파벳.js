@@ -1,32 +1,47 @@
 const path = process.platform === "linux" ? "/dev/stdin" : "./input.txt";
 const input = require("fs").readFileSync(path).toString().trim().split("\n");
 
-const solution = (input) => {
-  const [r, c] = input[0].split(' ').map(Number);
-  const graph = [];
-  for (let i = 0; i < r; i += 1) {
-    graph.push(input[i + 1].split(''));
-  }
-  const visited = new Set();
-  visited.add(graph[0][0]);
-  const dx = [1, -1, 0, 0];
-  const dy = [0, 0, 1, -1];
-  let answer = 0;
+function solution(input) {
+  const [R, C] = input[0].split(" ").map(Number);
+  const board = input.slice(1).map((row) => row.split(""));
+
+  const dx = [0, 1, 0, -1];
+  const dy = [1, 0, -1, 0];
+
+  let maxCount = 0;
+  const visitedAlpha = new Set();
+
   const dfs = (x, y, count) => {
-    answer = Math.max(answer, count);
-    for (let i = 0; i < 4; i += 1) {
+    // 현재 알파벳이 이미 방문된 경우 탐색 종료
+    if (visitedAlpha.has(board[x][y])) {
+      return;
+    }
+
+    // 현재 위치의 알파벳을 방문 처리
+    visitedAlpha.add(board[x][y]);
+
+    // 사방 탐색
+    for (let i = 0; i < 4; i++) {
       const nx = x + dx[i];
       const ny = y + dy[i];
-      if (nx < 0 || nx >= r || ny < 0 || ny >= c) continue;
-      if (visited.has(graph[nx][ny])) continue;
-      visited.add(graph[nx][ny]);
-      dfs(nx, ny, count + 1);
-      visited.delete(graph[nx][ny]);
-    }
-  };
-  dfs(0, 0, 1);
-  return answer;
-};
 
-const answer  = solution(input);
-console.log(answer);
+      if (nx >= 0 && nx < R && ny >= 0 && ny < C) {
+        dfs(nx, ny, count + 1);
+      }
+    }
+
+    // 최대 이동 횟수 갱신
+    maxCount = Math.max(maxCount, count);
+
+    // 백트래킹: 현재 알파벳 방문 해제
+    visitedAlpha.delete(board[x][y]);
+  };
+
+  // 시작 위치에서 DFS 탐색 시작
+  dfs(0, 0, 1);
+
+  // 결과 출력
+  console.log(maxCount);
+}
+
+solution(input);
