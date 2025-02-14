@@ -1,31 +1,28 @@
 const path = process.platform === "linux" ? "/dev/stdin" : "./input.txt";
 const input = require("fs").readFileSync(path).toString().trim().split("\n");
 
-const solution = (input) => {
-  const [n, s] = input[0].split(' ').map(Number);
-  const arr = input[1].split(' ').map(Number);
+function solution(input) {
+  const [N, S] = input[0].split(" ").map(Number);
+  const array = input[1].split(" ").map(Number);
 
-  // 부분합 중에 그 합이 s 이상이 되는 것 중, 가장 짧은 것의 길이
-  const prefixSum = [0];
-  let sum = 0;
-  for (let i = 0; i < n; i++) {
-    sum += arr[i];
-    prefixSum.push(sum);
-  }
-
-  let answer = 100001;
+  let answer = Infinity;
   let left = 0;
-  let right = 1;
-  while (left < right && right <= n) {
-    if (prefixSum[right] - prefixSum[left] >= s) {
-      answer = Math.min(answer, right - left);
+  let right = 0;
+  let sum = 0;
+
+  while (right < N) {
+    sum += array[right]; // 현재 요소 추가
+
+    while (sum >= S) { // S 이상이면 최소 길이 갱신 후 left 증가
+      answer = Math.min(answer, right - left + 1);
+      sum -= array[left];
       left++;
-    } else {
-      right++;
     }
+
+    right++; // right 포인터 이동
   }
 
-  console.log(answer === 100001 ? 0 : answer);
+  console.log(answer === Infinity ? 0 : answer);
 }
 
 solution(input);
