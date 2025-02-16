@@ -1,37 +1,38 @@
 const path = process.platform === "linux" ? "/dev/stdin" : "./input.txt";
 const input = require("fs").readFileSync(path).toString().trim().split("\n");
 
-// 양수는 큰 수끼리 곱하고
-// 음수는 작은 수끼리 곱하고
 function solution(input) {
   const N = Number(input[0]);
   const array = input.slice(1).map(Number);
 
-  const positives = array.filter((number) => number > 0).sort((a, b) => a - b);
-  const negatives = array.filter((number) => number <= 0).sort((a, b) => a - b);
+  const positives = [];
+  const negatives = [];
+  let sum = 0;
 
-  let positiveSum = 0;
-  let negativeSum = 0;
-
-  while (positives.length) {
-    if (positives.length >= 2) {
-      const [a, b] = positives.splice(-2);
-      positiveSum += Math.max(a * b, a + b);
-    } else {
-      positiveSum += positives.pop();
-    }
+  for (const num of array) {
+    if (num > 1) positives.push(num);
+    else if (num <= 0) negatives.push(num);
+    else sum += num; // **1은 곱하는 것보다 더하는 게 유리하므로 바로 sum에 추가**
   }
 
-  while (negatives.length) {
-    if (negatives.length >= 2) {
-      const [small, large] = negatives.splice(0, 2);
-      negativeSum += small * large;
-    } else {
-      negativeSum += negatives.pop();
-    }
+  // **양수는 큰 수부터 묶어 곱해야 최댓값**
+  positives.sort((a, b) => b - a);
+  // **음수는 작은 수부터 묶어 곱해야 최댓값**
+  negatives.sort((a, b) => a - b);
+
+  // **양수 그룹 계산**
+  for (let i = 0; i < positives.length; i += 2) {
+    if (i + 1 < positives.length) sum += positives[i] * positives[i + 1];
+    else sum += positives[i]; // **남은 값이 있다면 그냥 더하기**
   }
 
-  console.log(negativeSum + positiveSum);
+  // **음수 그룹 계산**
+  for (let i = 0; i < negatives.length; i += 2) {
+    if (i + 1 < negatives.length) sum += negatives[i] * negatives[i + 1];
+    else sum += negatives[i]; // **남은 값이 있다면 그냥 더하기**
+  }
+
+  console.log(sum);
 }
 
 solution(input);
