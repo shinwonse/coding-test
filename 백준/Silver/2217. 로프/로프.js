@@ -1,23 +1,17 @@
-/*
-* 2217 로프
-* 로프들을 이용하여 들어올릴 수 있는 물체의 최대 중량
-* */
+const path = process.platform === 'linux' ? '/dev/stdin' : './input.txt';
+const input = require('fs').readFileSync(path).toString().trim().split('\n');
 
-const path = process.platform === "linux" ? "/dev/stdin" : "./input.txt";
-const input = require("fs").readFileSync(path).toString().trim().split("\n");
+function solution(input) {
+  const N = Number(input[0]);
+  const ropes = input.slice(1).map(Number).sort((a, b) => b - a);
 
-const n = input.shift();
-const ropes = input.map(i => Number(i));
+  let maxWeight = 0;
 
-function solution(n, ropes) {
-  const sortedRopes = ropes.sort((a, b) => a - b);
-  const arr = [];
-
-  for (let i = 0; i < n; i++) {
-    arr.push(sortedRopes[i] * (n - i));
+  for (let i = 0; i < N; i++) {
+    maxWeight = Math.max(maxWeight, ropes[i] * (i + 1));
   }
 
-  return Math.max(...arr);
+  console.log(maxWeight);
 }
 
-console.log(solution(n, ropes));
+solution(input);
