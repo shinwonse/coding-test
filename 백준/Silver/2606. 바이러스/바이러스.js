@@ -1,33 +1,34 @@
-const path = process.platform === "linux" ? "/dev/stdin" : "./input.txt";
-const input = require("fs").readFileSync(path).toString().trim().split("\n");
+const path = process.platform === 'linux' ? '/dev/stdin' : './input.txt';
+const input = require('fs').readFileSync(path).toString().trim().split('\n');
 
-function solution(input) {
-  const n = Number(input[0]);
-  const m = Number(input[1]);
-
-  const graph = Array.from({ length: n + 1 }, () => []);
-
-  for (let i = 2; i < m + 2; i++) {
-    const [from, to] = input[i].split(" ").map(Number);
-    graph[from].push(to);
-    graph[to].push(from);
-  }
-
-  const visited = Array(n + 1).fill(false);
-
-  dfs(graph, visited, 1);
-
-  const result = visited.filter((v) => v).length - 1;
-  console.log(result);
-}
-
-function dfs(graph, visited, node) {
+function dfs(node, graph, visited) {
   visited[node] = true;
+  let count = 0;
+
   for (const next of graph[node]) {
     if (!visited[next]) {
-      dfs(graph, visited, next);
+      count += 1 + dfs(next, graph, visited);
     }
   }
+
+  return count;
+}
+
+function solution(input) {
+  const N = Number(input[0]);
+  const M = Number(input[1]);
+
+  const graph = Array.from({ length: N + 1 }, () => []);
+  const visited = Array.from({ length: N + 1 }, () => false);
+
+  for (let i = 2; i < M + 2; i++) {
+    const [x, y] = input[i].split(' ').map(Number);
+    graph[x].push(y);
+    graph[y].push(x);
+  }
+
+  const infectedCount = dfs(1, graph, visited);
+  console.log(infectedCount);
 }
 
 solution(input);
