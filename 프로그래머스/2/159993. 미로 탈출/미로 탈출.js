@@ -31,11 +31,13 @@ function bfs(start, target, maps) {
     return -1;
 }
 
-function findPosition(maps, targetChar) {
-    for (let i = 0; i < maps.length; i++) {
-      for (let j = 0; j < maps[0].length; j++) {
-        if (maps[i][j] === targetChar) return [i, j];
-      }
+function findPosition(map, target) {
+    for (let i = 0; i < map.length; i++) {
+        for (let j = 0; j < map[0].length; j++) {
+            if (map[i][j] === target) {
+                return [i, j];
+            }
+        }
     }
 }
 
