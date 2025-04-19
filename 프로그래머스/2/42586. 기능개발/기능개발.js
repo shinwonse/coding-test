@@ -3,16 +3,18 @@ function solution(progresses, speeds) {
     let queue = [];
     
     for (let i = 0; i < progresses.length; i++) {
-        const remainedProgress = 100 - progresses[i];
-        const remainedDay = Math.ceil(remainedProgress / speeds[i]);
+        const progress = progresses[i];
+        const speed = speeds[i];
         
-        if (queue.length === 0) {
+        const remainedDay = Math.ceil((100 - progress) / speed);
+        
+        if (queue.length && queue[0] >= remainedDay) {
             queue.push(remainedDay);
-        } else if (queue[0] >= remainedDay) {
-            queue.push(remainedDay);
-        } else {
+        } else if (queue.length && queue[0] < remainedDay) {
             answer.push(queue.length);
             queue = [];
+            queue.push(remainedDay);
+        } else {        
             queue.push(remainedDay);
         }
     }
